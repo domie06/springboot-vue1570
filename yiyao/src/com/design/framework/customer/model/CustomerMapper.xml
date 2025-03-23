@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.design.framework.customer.dao.CustomerDao" >
+    <resultMap id="BaseResultMap" type="com.design.framework.customer.model.Customer" >
+        <id column="c_id" property="c_id" jdbcType="INTEGER" />
+        <result column="c_name" property="c_name" jdbcType="VARCHAR" />
+        <result column="sex" property="sex" jdbcType="INTEGER" />
+        <result column="diagnosis" property="diagnosis" jdbcType="VARCHAR" />
+        <result column="notes" property="notes" jdbcType="VARCHAR" />
+        <result column="ext1_int" property="ext1_int" jdbcType="INTEGER" />
+        <result column="ect2_varchar" property="ect2_varchar" jdbcType="VARCHAR" />
+    </resultMap>
+    <sql id="customer_columns" >
+        c_id, c_name, sex, diagnosis, notes, ext1_int, ect2_varchar
+    </sql>
+    
+    <select id="list" resultMap="BaseResultMap">
+        select 
+        <include refid="customer_columns" />
+        from customer 
+    </select>
+    
+    <select id="load" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+        select 
+        <include refid="customer_columns" />
+        from customer
+        where c_id = #{c_id,jdbcType=INTEGER}
+    </select>
+    <delete id="delete" parameterType="java.lang.Integer" >
+        delete from customer
+        where c_id = #{c_id,jdbcType=INTEGER}
+    </delete>
+    <insert id="add" parameterType="com.design.framework.customer.model.Customer" >
+        insert into customer
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="c_id != null" >
+                c_id,
+            </if>
+            <if test="c_name != null" >
+                c_name,
+            </if>
+            <if test="sex != null" >
+                sex,
+            </if>
+            <if test="diagnosis != null" >
+                diagnosis,
+            </if>
+            <if test="notes != null" >
+                notes,
+            </if>
+            <if test="ext1_int != null" >
+                ext1_int,
+            </if>
+            <if test="ect2_varchar != null" >
+                ect2_varchar,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="c_id != null" >
+                #{c_id,jdbcType=INTEGER},
+            </if>
+            <if test="c_name != null" >
+                #{c_name,jdbcType=VARCHAR},
+            </if>
+            <if test="sex != null" >
+                #{sex,jdbcType=INTEGER},
+            </if>
+            <if test="diagnosis != null" >
+                #{diagnosis,jdbcType=VARCHAR},
+            </if>
+            <if test="notes != null" >
+                #{notes,jdbcType=VARCHAR},
+            </if>
+            <if test="ext1_int != null" >
+                #{ext1_int,jdbcType=INTEGER},
+            </if>
+            <if test="ect2_varchar != null" >
+                #{ect2_varchar,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="update" parameterType="com.design.framework.customer.model.Customer" >
+        update customer
+        <set >
+            <if test="c_name != null" >
+                c_name = #{c_name,jdbcType=VARCHAR},
+            </if>
+            <if test="sex != null" >
+                sex = #{sex,jdbcType=INTEGER},
+            </if>
+            <if test="diagnosis != null" >
+                diagnosis = #{diagnosis,jdbcType=VARCHAR},
+            </if>
+            <if test="notes != null" >
+                notes = #{notes,jdbcType=VARCHAR},
+            </if>
+            <if test="ext1_int != null" >
+                ext1_int = #{ext1_int,jdbcType=INTEGER},
+            </if>
+            <if test="ect2_varchar != null" >
+                ect2_varchar = #{ect2_varchar,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where c_id = #{c_id,jdbcType=INTEGER}
+    </update>
+</mapper>

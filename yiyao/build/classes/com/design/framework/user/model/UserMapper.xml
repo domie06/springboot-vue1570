@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.design.framework.user.dao.UserDao" >
+    <resultMap id="BaseResultMap" type="com.design.framework.user.model.User" >
+        <id column="user_id" property="user_id" jdbcType="INTEGER" />
+        <result column="user_name" property="user_name" jdbcType="VARCHAR" />
+        <result column="account" property="account" jdbcType="VARCHAR" />
+        <result column="password" property="password" jdbcType="VARCHAR" />
+        <result column="type" property="type" jdbcType="VARCHAR" />
+        <result column="ext1_int" property="ext1_int" jdbcType="INTEGER" />
+        <result column="ext2_varchar" property="ext2_varchar" jdbcType="VARCHAR" />
+    </resultMap>
+    <sql id="user_columns" >
+        user_id, user_name, account, password, type, ext1_int, ext2_varchar
+    </sql>
+    
+    <select id="list" resultMap="BaseResultMap">
+        select 
+        <include refid="user_columns" />
+        from user where type > 0
+    </select>
+    
+    <select id="login" resultMap="BaseResultMap" parameterType="com.design.framework.user.model.User" >
+        select 
+        <include refid="user_columns" />
+        from user
+        where account = #{account} and password = #{password}
+    </select>
+    
+    <select id="loadAccount" resultMap="BaseResultMap">
+        select 
+        <include refid="user_columns" />
+        from user
+        where account = #{account}
+    </select>
+    
+    <select id="load" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+        select 
+        <include refid="user_columns" />
+        from user
+        where user_id = #{user_id,jdbcType=INTEGER}
+    </select>
+    <delete id="delete" parameterType="java.lang.Integer" >
+        delete from user
+        where user_id = #{user_id,jdbcType=INTEGER}
+    </delete>
+    <insert id="add" parameterType="com.design.framework.user.model.User" >
+        insert into user
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="user_id != null" >
+                user_id,
+            </if>
+            <if test="user_name != null" >
+                user_name,
+            </if>
+            <if test="account != null" >
+                account,
+            </if>
+            <if test="password != null" >
+                password,
+            </if>
+            <if test="type != null" >
+                type,
+            </if>
+            <if test="ext1_int != null" >
+                ext1_int,
+            </if>
+            <if test="ext2_varchar != null" >
+                ext2_varchar,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="user_id != null" >
+                #{user_id,jdbcType=INTEGER},
+            </if>
+            <if test="user_name != null" >
+                #{user_name,jdbcType=VARCHAR},
+            </if>
+            <if test="account != null" >
+                #{account,jdbcType=VARCHAR},
+            </if>
+            <if test="password != null" >
+                #{password,jdbcType=VARCHAR},
+            </if>
+            <if test="type != null" >
+                #{type,jdbcType=VARCHAR},
+            </if>
+            <if test="ext1_int != null" >
+                #{ext1_int,jdbcType=INTEGER},
+            </if>
+            <if test="ext2_varchar != null" >
+                #{ext2_varchar,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="update" parameterType="com.design.framework.user.model.User" >
+        update user
+        <set >
+            <if test="user_name != null" >
+                user_name = #{user_name,jdbcType=VARCHAR},
+            </if>
+            <if test="account != null" >
+                account = #{account,jdbcType=VARCHAR},
+            </if>
+            <if test="password != null" >
+                password = #{password,jdbcType=VARCHAR},
+            </if>
+            <if test="type != null" >
+                type = #{type,jdbcType=VARCHAR},
+            </if>
+            <if test="ext1_int != null" >
+                ext1_int = #{ext1_int,jdbcType=INTEGER},
+            </if>
+            <if test="ext2_varchar != null" >
+                ext2_varchar = #{ext2_varchar,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where user_id = #{user_id,jdbcType=INTEGER}
+    </update>
+</mapper>

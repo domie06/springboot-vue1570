@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.design.framework.medicine.dao.MedicineDao" >
+    <resultMap id="BaseResultMap" type="com.design.framework.medicine.model.Medicine" >
+        <id column="m_id" property="m_id" jdbcType="INTEGER" />
+        <result column="m_name" property="m_name" jdbcType="VARCHAR" />
+        <result column="manufacturer" property="manufacturer" jdbcType="VARCHAR" />
+        <result column="untis" property="untis" jdbcType="VARCHAR" />
+        <result column="pov" property="pov" jdbcType="DATE" />
+        <result column="batch" property="batch" jdbcType="VARCHAR" />
+        <result column="inprice" property="inprice" jdbcType="REAL" />
+        <result column="outprice" property="outprice" jdbcType="REAL" />
+        <result column="notes" property="notes" jdbcType="VARCHAR" />
+        <result column="mt_id" property="mt_id" jdbcType="INTEGER" />
+        <result column="ext1_int" property="ext1_int" jdbcType="INTEGER" />
+        <result column="ext2_varchar" property="ext2_varchar" jdbcType="VARCHAR" />
+    </resultMap>
+    
+    <sql id="medicine_columns" >
+        m_id, m_name, manufacturer, untis, pov, batch, inprice, outprice, notes, 
+        mt_id, ext1_int, ext2_varchar
+    </sql>
+    
+     <resultMap type="com.design.framework.medicine.model.Medicine" id="SimpleResultMap" extends="BaseResultMap">
+        <association property="medicineType" javaType="com.design.framework.medicineType.model.MedicineType">
+            <id column="mt_id" property="mt_id" jdbcType="INTEGER" />
+            <result column="mt_name" property="mt_name" jdbcType="VARCHAR" />
+        </association>
+    
+    </resultMap>
+    
+    <select id="list" resultMap="SimpleResultMap" parameterType="java.lang.String" >
+        select 
+        m_id, m_name, manufacturer, untis, pov, batch, inprice, outprice, notes, 
+        mt_name
+        from medicine left join medicineType on medicine.mt_id = medicineType.mt_id
+        <if test="key != null" >
+                where m_name = #{key} or mt_name = #{key}
+            </if>
+    </select>
+    <select id="load" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+        select 
+        <include refid="medicine_columns" />
+        from medicine
+        where m_id = #{m_id,jdbcType=INTEGER}
+    </select>
+    <delete id="delete" parameterType="java.lang.Integer" >
+        delete from medicine
+        where m_id = #{m_id,jdbcType=INTEGER}
+    </delete>
+    <insert id="add" parameterType="com.design.framework.medicine.model.Medicine" >
+        insert into medicine
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="m_id != null" >
+                m_id,
+            </if>
+            <if test="m_name != null" >
+                m_name,
+            </if>
+            <if test="manufacturer != null" >
+                manufacturer,
+            </if>
+            <if test="untis != null" >
+                untis,
+            </if>
+            <if test="pov != null" >
+                pov,
+            </if>
+            <if test="batch != null" >
+                batch,
+            </if>
+            <if test="inprice != null" >
+                inprice,
+            </if>
+            <if test="outprice != null" >
+                outprice,
+            </if>
+            <if test="notes != null" >
+                notes,
+            </if>
+            <if test="mt_id != null" >
+                mt_id,
+            </if>
+            <if test="ext1_int != null" >
+                ext1_int,
+            </if>
+            <if test="ext2_varchar != null" >
+                ext2_varchar,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="m_id != null" >
+                #{m_id,jdbcType=INTEGER},
+            </if>
+            <if test="m_name != null" >
+                #{m_name,jdbcType=VARCHAR},
+            </if>
+            <if test="manufacturer != null" >
+                #{manufacturer,jdbcType=VARCHAR},
+            </if>
+            <if test="untis != null" >
+                #{untis,jdbcType=VARCHAR},
+            </if>
+            <if test="pov != null" >
+                #{pov,jdbcType=DATE},
+            </if>
+            <if test="batch != null" >
+                #{batch,jdbcType=VARCHAR},
+            </if>
+            <if test="inprice != null" >
+                #{inprice,jdbcType=REAL},
+            </if>
+            <if test="outprice != null" >
+                #{outprice,jdbcType=REAL},
+            </if>
+            <if test="notes != null" >
+                #{notes,jdbcType=VARCHAR},
+            </if>
+            <if test="mt_id != null" >
+                #{mt_id,jdbcType=INTEGER},
+            </if>
+            <if test="ext1_int != null" >
+                #{ext1_int,jdbcType=INTEGER},
+            </if>
+            <if test="ext2_varchar != null" >
+                #{ext2_varchar,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="update" parameterType="com.design.framework.medicine.model.Medicine" >
+        update medicine
+        <set >
+            <if test="m_name != null" >
+                m_name = #{m_name,jdbcType=VARCHAR},
+            </if>
+            <if test="manufacturer != null" >
+                manufacturer = #{manufacturer,jdbcType=VARCHAR},
+            </if>
+            <if test="untis != null" >
+                untis = #{untis,jdbcType=VARCHAR},
+            </if>
+            <if test="pov != null" >
+                pov = #{pov,jdbcType=DATE},
+            </if>
+            <if test="batch != null" >
+                batch = #{batch,jdbcType=VARCHAR},
+            </if>
+            <if test="inprice != null" >
+                inprice = #{inprice,jdbcType=REAL},
+            </if>
+            <if test="outprice != null" >
+                outprice = #{outprice,jdbcType=REAL},
+            </if>
+            <if test="notes != null" >
+                notes = #{notes,jdbcType=VARCHAR},
+            </if>
+            <if test="mt_id != null" >
+                mt_id = #{mt_id,jdbcType=INTEGER},
+            </if>
+            <if test="ext1_int != null" >
+                ext1_int = #{ext1_int,jdbcType=INTEGER},
+            </if>
+            <if test="ext2_varchar != null" >
+                ext2_varchar = #{ext2_varchar,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where m_id = #{m_id,jdbcType=INTEGER}
+    </update>
+</mapper>

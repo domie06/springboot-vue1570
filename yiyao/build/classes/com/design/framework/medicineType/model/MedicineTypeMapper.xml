@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.design.framework.medicineType.dao.MedicineTypeDao" >
+    <resultMap id="BaseResultMap" type="com.design.framework.medicineType.model.MedicineType" >
+        <id column="mt_id" property="mt_id" jdbcType="INTEGER" />
+        <result column="mt_name" property="mt_name" jdbcType="VARCHAR" />
+        <result column="ext1_int" property="ext1_int" jdbcType="INTEGER" />
+        <result column="ect2_varchar" property="ect2_varchar" jdbcType="VARCHAR" />
+    </resultMap>
+    <sql id="medicineType_columns" >
+        mt_id, mt_name, ext1_int, ect2_varchar
+    </sql>
+    <select id="list" resultMap="BaseResultMap">
+        select 
+        <include refid="medicineType_columns" />
+        from medicineType 
+    </select>
+    <select id="load" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+        select 
+        <include refid="medicineType_columns" />
+        from medicineType
+        where mt_id = #{mt_id,jdbcType=INTEGER}
+    </select>
+    <delete id="delete" parameterType="java.lang.Integer" >
+        delete from medicineType
+        where mt_id = #{mt_id,jdbcType=INTEGER}
+    </delete>
+    <insert id="add" parameterType="com.design.framework.medicineType.model.MedicineType" >
+        insert into medicineType
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="mt_id != null" >
+                mt_id,
+            </if>
+            <if test="mt_name != null" >
+                mt_name,
+            </if>
+            <if test="ext1_int != null" >
+                ext1_int,
+            </if>
+            <if test="ect2_varchar != null" >
+                ect2_varchar,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="mt_id != null" >
+                #{mt_id,jdbcType=INTEGER},
+            </if>
+            <if test="mt_name != null" >
+                #{mt_name,jdbcType=VARCHAR},
+            </if>
+            <if test="ext1_int != null" >
+                #{ext1_int,jdbcType=INTEGER},
+            </if>
+            <if test="ect2_varchar != null" >
+                #{ect2_varchar,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="update" parameterType="com.design.framework.medicineType.model.MedicineType" >
+        update medicineType
+        <set >
+            <if test="mt_name != null" >
+                mt_name = #{mt_name,jdbcType=VARCHAR},
+            </if>
+            <if test="ext1_int != null" >
+                ext1_int = #{ext1_int,jdbcType=INTEGER},
+            </if>
+            <if test="ect2_varchar != null" >
+                ect2_varchar = #{ect2_varchar,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where mt_id = #{mt_id,jdbcType=INTEGER}
+    </update>
+</mapper>

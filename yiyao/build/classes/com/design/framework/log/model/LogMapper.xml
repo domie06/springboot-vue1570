@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.design.framework.log.dao.LogDao" >
+    <resultMap id="BaseResultMap" type="com.design.framework.log.model.Log" >
+        <id column="l_id" property="l_id" jdbcType="INTEGER" />
+        <result column="l_type" property="l_type" jdbcType="INTEGER" />
+        <result column="m_id" property="m_id" jdbcType="INTEGER" />
+        <result column="s_id" property="s_id" jdbcType="INTEGER" />
+        <result column="m_num" property="m_num" jdbcType="INTEGER" />
+        <result column="u_id" property="u_id" jdbcType="INTEGER" />
+        <result column="l_date" property="l_date" jdbcType="TIMESTAMP" />
+    </resultMap>
+    <sql id="log_columns" >
+        l_id, l_type, m_id, s_id, m_num, u_id, l_date
+    </sql>
+    <select id="load" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+        select 
+        <include refid="log_columns" />
+        from log
+        where l_id = #{l_id,jdbcType=INTEGER}
+    </select>
+    
+    <select id="boundList" resultType="map" parameterType="java.lang.Integer" >
+        SELECT 
+			m.m_name,s.s_name,l.m_num,u.user_name,l_date
+		FROM
+		 	log l,medicine m,supplier s,user u
+		WHERE
+		 	l.m_id=m.m_id and l.s_id = s.s_id and l.u_id = u.user_id and l.l_type = #{l_type,jdbcType=INTEGER}
+		order by
+			l.l_date desc
+    </select>
+    
+    <select id="saleList" resultType="map" parameterType="java.lang.Integer" >
+    	SELECT 
+			m.m_name,c.c_name,c.sex,c.diagnosis,l.m_num,u.user_name,l_date
+		FROM
+		 	log l,medicine m,customer c,user u
+		WHERE
+		 	l.m_id=m.m_id and l.s_id = c.c_id and l.u_id = u.user_id and l.l_type = #{l_type,jdbcType=INTEGER}
+		ORDER BY
+			l.l_date desc
+    </select>
+    
+    <select id="saleChart" resultType="map">
+    	SELECT 
+			m.m_name,m.manufacturer,mt.mt_name,sum(l.m_num) as sum
+		FROM
+		 	log l,medicine m,medicinetype mt
+		WHERE
+		 	l.m_id=m.m_id and l.l_type = 0 and mt.mt_id=m.mt_id
+		GROUP BY
+			l.m_id
+		ORDER BY
+			sum(l.m_num) desc
+    </select>
+    
+    <delete id="delete" parameterType="java.lang.Integer" >
+        delete from log
+        where l_id = #{l_id,jdbcType=INTEGER}
+    </delete>
+    <insert id="add" parameterType="com.design.framework.log.model.Log" >
+        insert into log
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="l_id != null" >
+                l_id,
+            </if>
+            <if test="l_type != null" >
+                l_type,
+            </if>
+            <if test="m_id != null" >
+                m_id,
+            </if>
+            <if test="s_id != null" >
+                s_id,
+            </if>
+            <if test="m_num != null" >
+                m_num,
+            </if>
+            <if test="u_id != null" >
+                u_id,
+            </if>
+            <if test="l_date != null" >
+                l_date,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="l_id != null" >
+                #{l_id,jdbcType=INTEGER},
+            </if>
+            <if test="l_type != null" >
+                #{l_type,jdbcType=INTEGER},
+            </if>
+            <if test="m_id != null" >
+                #{m_id,jdbcType=INTEGER},
+            </if>
+            <if test="s_id != null" >
+                #{s_id,jdbcType=INTEGER},
+            </if>
+            <if test="m_num != null" >
+                #{m_num,jdbcType=INTEGER},
+            </if>
+            <if test="u_id != null" >
+                #{u_id,jdbcType=INTEGER},
+            </if>
+            <if test="l_date != null" >
+                #{l_date,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    <update id="update" parameterType="com.design.framework.log.model.Log" >
+        update log
+        <set >
+            <if test="l_type != null" >
+                l_type = #{l_type,jdbcType=INTEGER},
+            </if>
+            <if test="m_id != null" >
+                m_id = #{m_id,jdbcType=INTEGER},
+            </if>
+            <if test="s_id != null" >
+                s_id = #{s_id,jdbcType=INTEGER},
+            </if>
+            <if test="m_num != null" >
+                m_num = #{m_num,jdbcType=INTEGER},
+            </if>
+            <if test="u_id != null" >
+                u_id = #{u_id,jdbcType=INTEGER},
+            </if>
+            <if test="l_date != null" >
+                l_date = #{l_date,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where l_id = #{l_id,jdbcType=INTEGER}
+    </update>
+</mapper>

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.design.framework.supplier.dao.SupplierDao" >
+    <resultMap id="BaseResultMap" type="com.design.framework.supplier.model.Supplier" >
+        <id column="s_id" property="s_id" jdbcType="INTEGER" />
+        <result column="s_name" property="s_name" jdbcType="VARCHAR" />
+        <result column="ext1_int" property="ext1_int" jdbcType="INTEGER" />
+        <result column="ect2_varchar" property="ect2_varchar" jdbcType="VARCHAR" />
+    </resultMap>
+    <sql id="supplier_columns" >
+        s_id, s_name, ext1_int, ect2_varchar
+    </sql>
+    
+    <select id="list" resultMap="BaseResultMap">
+        select 
+        <include refid="supplier_columns" />
+        from supplier 
+    </select>
+    
+    <select id="load" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+        select 
+        <include refid="supplier_columns" />
+        from supplier
+        where s_id = #{s_id,jdbcType=INTEGER}
+    </select>
+    <delete id="delete" parameterType="java.lang.Integer" >
+        delete from supplier
+        where s_id = #{s_id,jdbcType=INTEGER}
+    </delete>
+    <insert id="add" parameterType="com.design.framework.supplier.model.Supplier" >
+        insert into supplier
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="s_id != null" >
+                s_id,
+            </if>
+            <if test="s_name != null" >
+                s_name,
+            </if>
+            <if test="ext1_int != null" >
+                ext1_int,
+            </if>
+            <if test="ect2_varchar != null" >
+                ect2_varchar,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="s_id != null" >
+                #{s_id,jdbcType=INTEGER},
+            </if>
+            <if test="s_name != null" >
+                #{s_name,jdbcType=VARCHAR},
+            </if>
+            <if test="ext1_int != null" >
+                #{ext1_int,jdbcType=INTEGER},
+            </if>
+            <if test="ect2_varchar != null" >
+                #{ect2_varchar,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="update" parameterType="com.design.framework.supplier.model.Supplier" >
+        update supplier
+        <set >
+            <if test="s_name != null" >
+                s_name = #{s_name,jdbcType=VARCHAR},
+            </if>
+            <if test="ext1_int != null" >
+                ext1_int = #{ext1_int,jdbcType=INTEGER},
+            </if>
+            <if test="ect2_varchar != null" >
+                ect2_varchar = #{ect2_varchar,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where s_id = #{s_id,jdbcType=INTEGER}
+    </update>
+</mapper>

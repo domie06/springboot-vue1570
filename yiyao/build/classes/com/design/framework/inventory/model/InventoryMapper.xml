@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.design.framework.inventory.dao.InventoryDao" >
+    <resultMap id="BaseResultMap" type="com.design.framework.inventory.model.Inventory" >
+        <id column="m_id" property="m_id" jdbcType="INTEGER" />
+        <result column="num" property="num" jdbcType="INTEGER" />
+        <result column="max_num" property="max_num" jdbcType="INTEGER" />
+        <result column="min_num" property="min_num" jdbcType="INTEGER" />
+    </resultMap>
+    <sql id="inventory_columns" >
+        m_id, num, max_num, min_num
+    </sql>
+    <select id="load" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+        select 
+        <include refid="inventory_columns" />
+        from inventory
+        where m_id = #{m_id,jdbcType=INTEGER}
+    </select>
+    <delete id="delete" parameterType="java.lang.Integer" >
+        delete from inventory
+        where m_id = #{m_id,jdbcType=INTEGER}
+    </delete>
+    <insert id="add" parameterType="com.design.framework.inventory.model.Inventory" >
+        insert into inventory
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="m_id != null" >
+                m_id,
+            </if>
+            <if test="num != null" >
+                num,
+            </if>
+            <if test="max_num != null" >
+                max_num,
+            </if>
+            <if test="min_num != null" >
+                min_num,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="m_id != null" >
+                #{m_id,jdbcType=INTEGER},
+            </if>
+            <if test="num != null" >
+                #{num,jdbcType=INTEGER},
+            </if>
+            <if test="max_num != null" >
+                #{max_num,jdbcType=INTEGER},
+            </if>
+            <if test="min_num != null" >
+                #{min_num,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+    <update id="update" parameterType="com.design.framework.inventory.model.Inventory" >
+        update inventory
+        <set >
+            <if test="num != null" >
+                num = #{num,jdbcType=INTEGER},
+            </if>
+            <if test="max_num != null" >
+                max_num = #{max_num,jdbcType=INTEGER},
+            </if>
+            <if test="min_num != null" >
+                min_num = #{min_num,jdbcType=INTEGER},
+            </if>
+        </set>
+        where m_id = #{m_id,jdbcType=INTEGER}
+    </update>
+    
+    <resultMap type="com.design.framework.inventory.model.Inventory" id="SimpleResultMap" extends="BaseResultMap">
+        <association property="medicine" javaType="com.design.framework.medicine.model.Medicine">
+            <id column="m_id" property="m_id" jdbcType="INTEGER" />
+            <result column="m_name" property="m_name" jdbcType="VARCHAR" />
+            <result column="manufacturer" property="manufacturer" jdbcType="VARCHAR" />
+            <result column="batch" property="batch" jdbcType="VARCHAR" />
+            <result column="notes" property="notes" jdbcType="VARCHAR" />
+        </association>
+    
+    </resultMap>
+    <select id="list" resultMap="SimpleResultMap">
+        select 
+        inventory.m_id, num, max_num, min_num,m_name,manufacturer,batch,notes
+        from inventory left join medicine on inventory.m_id = medicine.m_id
+    </select>
+    
+    
+</mapper>
